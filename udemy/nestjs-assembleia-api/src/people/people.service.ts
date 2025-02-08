@@ -8,4 +8,8 @@ export class PeopleService {
   list(): Person[] {
     return this.people;
   }
+
+  save(person: Person): void {
+    this.people.push(person);
+  }
 }
