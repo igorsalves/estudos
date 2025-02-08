@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Put, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Res,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { PeopleService } from './people.service';
 import { Person, PersonUpdateRequest } from './person';
@@ -34,8 +43,15 @@ export class PeopleController {
     @Body() personUpdateData: PersonUpdateRequest,
     @Res() response: Response,
   ): Response {
-    const person = this.peopleService.update(Number(id), personUpdateData);
+    this.peopleService.update(Number(id), personUpdateData);
 
     return response.status(200).send({ message: 'Atualizado com sucesso!' });
+  }
+
+  @Delete('/:id')
+  delete(@Param('id') id: number, @Res() response: Response): Response {
+    this.peopleService.delete(Number(id));
+
+    return response.status(204).send();
   }
 }

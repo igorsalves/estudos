@@ -10,13 +10,7 @@ export class PeopleService {
   }
 
   findById(id: number): Person {
-    const person = this.people.find((person) => person.id === id);
-
-    if (!person) {
-      throw new NotFoundException();
-    }
-
-    return person;
+    return this.getPersonById(id);
   }
 
   save(person: Person): void {
@@ -24,12 +18,28 @@ export class PeopleService {
   }
 
   update(id: number, personUpdateData: PersonUpdateRequest): void {
+    const person = this.getPersonById(id);
+
+    Object.assign(person, personUpdateData);
+  }
+
+  delete(id: number): void {
     const index = this.people.findIndex((person) => person.id === id);
 
     if (index === -1) {
       throw new NotFoundException();
     }
 
-    this.people[index] = { ...this.people[index], ...personUpdateData };
+    this.people.splice(index, 1);
+  }
+
+  private getPersonById(id: number): Person {
+    const person = this.people.find((person) => person.id === id);
+
+    if (!person) {
+      throw new NotFoundException();
+    }
+
+    return person;
   }
 }
