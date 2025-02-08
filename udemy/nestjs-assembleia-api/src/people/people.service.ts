@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Person } from './person';
+import { Person, PersonUpdateRequest } from './person';
 
 @Injectable()
 export class PeopleService {
@@ -21,5 +21,15 @@ export class PeopleService {
 
   save(person: Person): void {
     this.people.push(person);
+  }
+
+  update(id: number, personUpdateData: PersonUpdateRequest): void {
+    const index = this.people.findIndex((person) => person.id === id);
+
+    if (index === -1) {
+      throw new NotFoundException();
+    }
+
+    this.people[index] = { ...this.people[index], ...personUpdateData };
   }
 }

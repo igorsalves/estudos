@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { PeopleService } from './people.service';
-import { Person } from './person';
+import { Person, PersonUpdateRequest } from './person';
 
 @Controller('people')
 export class PeopleController {
@@ -26,5 +26,16 @@ export class PeopleController {
     this.peopleService.save(person);
 
     return response.status(201).send({ message: 'Salvo com sucesso!' });
+  }
+
+  @Put('/:id')
+  update(
+    @Param('id') id: number,
+    @Body() personUpdateData: PersonUpdateRequest,
+    @Res() response: Response,
+  ): Response {
+    const person = this.peopleService.update(Number(id), personUpdateData);
+
+    return response.status(200).send({ message: 'Atualizado com sucesso!' });
   }
 }
