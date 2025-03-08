@@ -34,6 +34,7 @@ export class WalletsService {
     shares: number;
   }) {
     const session = await this.connection.startSession();
+    // eslint-disable-next-line @typescript-eslint/await-thenable
     await session.startTransaction();
 
     try {
