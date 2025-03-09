@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
+import { Asset } from '../assets/entities/asset.entity';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { WalletAsset } from './entities/wallet-asset.entity';
 import { Wallet } from './entities/wallet.entity';
@@ -11,7 +12,7 @@ export class WalletsService {
     @InjectModel(Wallet.name) private readonly walletSchema: Model<Wallet>,
     @InjectModel(WalletAsset.name)
     private readonly walletAssetSchema: Model<WalletAsset>,
-    @InjectConnection() private connection: mongoose.Connection,
+    @InjectConnection() private readonly connection: mongoose.Connection,
   ) {}
 
   create(createWalletDto: CreateWalletDto) {
@@ -23,9 +24,14 @@ export class WalletsService {
   }
 
   findOne(id: string) {
-    return this.walletSchema
-      .findById(id)
-      .populate([{ path: 'assets', populate: ['asset'] }]);
+    return this.walletSchema.findById(id).populate([
+      {
+        path: 'assets', //walletasset
+        populate: ['asset'],
+      },
+    ]) as Promise<
+      (Wallet & { assets: (WalletAsset & { asset: Asset })[] }) | null
+    >;
   }
 
   async createWalletAsset(data: {
