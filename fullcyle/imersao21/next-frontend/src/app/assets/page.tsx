@@ -1,13 +1,25 @@
 import { AssetShow } from "@/components/AssetShow";
-import { Asset } from "@/models";
+import { WalletList } from "@/components/WalletList";
+import { getAssets, getMyWallet } from "@/queries/queries";
 import { Button, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 
-export async function getAssets(): Promise<Asset[]> {
-  const response = await fetch(`http://localhost:3000/assets`);
-  return response.json();
-}
+export default async function AssetsListPage({
+  searchParams
+}: Readonly<{
+  searchParams: Promise<{ wallet_id: string }>;
+}>) {
+  const { wallet_id } = await searchParams;
+  
+  if(!wallet_id) {
+    return <WalletList />;
+  }
 
-export default async function AssetsListPage() {
+  const wallet = await getMyWallet(wallet_id);
+  
+  if(!wallet) {
+    return <WalletList />;
+  }
+
   const assets = await getAssets();
   
   return (

@@ -42,6 +42,7 @@ export default async function AssetDashboard({
     time: (Date.parse(assetDaily.date) / 1000) as Time,
     value: assetDaily.price,
   }));
+  
   return (
     <div className="flex flex-col space-y-5 flex-grow">
       <div className="flex flex-col space-y-2">
