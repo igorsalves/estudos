@@ -2,6 +2,7 @@ import { AssetShow } from "@/components/AssetShow";
 import { WalletList } from "@/components/WalletList";
 import { getAssets, getMyWallet } from "@/queries/queries";
 import { Button, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
+import Link from "next/link";
 
 export default async function AssetsListPage({
   searchParams
@@ -42,7 +43,7 @@ export default async function AssetsListPage({
                 </TableCell>
               <TableCell>R$ {asset.price}</TableCell>
               <TableCell>
-                <Button color="light">Comprar/Vender</Button>
+                <Button color="light" as={Link} href={`/assets/${asset.symbol}?wallet_id=${wallet_id}`}>Comprar/Vender</Button>
               </TableCell>
             </TableRow>
             ))}
