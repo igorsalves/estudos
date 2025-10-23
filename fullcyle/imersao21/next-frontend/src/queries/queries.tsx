@@ -28,6 +28,5 @@ export async function getAssetDailies(
   const response = await fetch(
     `http://localhost:3000/assets/${assetSymbol}/dailies`
   );
-  return [];
-  // return response.json();
+  return response.json();
 }
