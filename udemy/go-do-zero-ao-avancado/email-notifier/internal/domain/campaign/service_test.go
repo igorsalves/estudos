@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/contract"
+	internalerrors "github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/internal-errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -76,5 +77,5 @@ func Test_Create_ValidateRepositorySave(t *testing.T) {
 
 	_, err := service.Create(newCampaing)
 
-	assert.Equal("database error", err.Error())
+	assert.True(errors.Is(internalerrors.ErrInternal, err))
 }

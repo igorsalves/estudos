@@ -2,6 +2,7 @@ package campaign
 
 import (
 	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/contract"
+	internalerrors "github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/internal-errors"
 )
 
 type Service struct {
@@ -22,7 +23,7 @@ func (s *Service) Create(newCampaign contract.NewCampaign) (string, error) {
 	err = s.Repository.Save(campaign)
 
 	if err != nil {
-		return "", err
+		return "", internalerrors.ErrInternal
 	}
 
 	return campaign.ID, nil
