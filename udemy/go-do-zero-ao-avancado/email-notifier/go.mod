@@ -7,7 +7,10 @@ require (
 	github.com/stretchr/testify v1.11.1
 )
 
-require github.com/jaswdr/faker v1.19.1 // indirect
+require (
+	github.com/go-chi/chi/v5 v5.2.3 // indirect
+	github.com/jaswdr/faker v1.19.1 // indirect
+)
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
