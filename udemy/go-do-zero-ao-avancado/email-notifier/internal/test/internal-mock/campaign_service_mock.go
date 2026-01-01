@@ -1,4 +1,4 @@
-package mock
+package internalmock
 
 import (
 	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/contract"

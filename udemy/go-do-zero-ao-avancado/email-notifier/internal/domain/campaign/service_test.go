@@ -1,46 +1,16 @@
-package campaign
+package campaign_test
 
 import (
 	"errors"
 	"testing"
 
 	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/contract"
+	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/domain/campaign"
 	internalerrors "github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/internal-errors"
+	internalmock "github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/test/internal-mock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
-
-type repositoryMock struct {
-	mock.Mock
-}
-
-func (r *repositoryMock) Create(campaign *Campaign) error {
-	args := r.Called(campaign)
-	return args.Error(0)
-}
-
-func (r *repositoryMock) Update(campaign *Campaign) error {
-	args := r.Called(campaign)
-	return args.Error(0)
-}
-
-func (r *repositoryMock) Get() ([]Campaign, error) {
-	// args := r.Called()
-	return nil, nil
-}
-
-func (r *repositoryMock) GetBy(id string) (*Campaign, error) {
-	args := r.Called(id)
-	if args.Error(1) != nil {
-		return nil, args.Error(1)
-	}
-	return args.Get(0).(*Campaign), nil
-}
-
-func (r *repositoryMock) Delete(campaign *Campaign) error {
-	args := r.Called(campaign)
-	return args.Error(0)
-}
 
 var (
 	newCampaign = contract.NewCampaign{
@@ -48,12 +18,12 @@ var (
 		Content: "Body Hi!",
 		Emails:  []string{"teste1@test.com"},
 	}
-	service = ServiceImp{}
+	service = campaign.ServiceImp{}
 )
 
 func Test_Create_Campaign(t *testing.T) {
 	assert := assert.New(t)
-	repositoryMock := new(repositoryMock)
+	repositoryMock := new(internalmock.CampaignRepositoryMock)
 	repositoryMock.On("Create", mock.Anything).Return(nil)
 	service.Repository = repositoryMock
 
@@ -72,8 +42,8 @@ func Test_Create_ValidateDomainError(t *testing.T) {
 }
 
 func Test_Create_SaveCampaign(t *testing.T) {
-	repositoryMock := new(repositoryMock)
-	repositoryMock.On("Create", mock.MatchedBy(func(campaign *Campaign) bool {
+	repositoryMock := new(internalmock.CampaignRepositoryMock)
+	repositoryMock.On("Create", mock.MatchedBy(func(campaign *campaign.Campaign) bool {
 		if campaign.Name != newCampaign.Name ||
 			campaign.Content != newCampaign.Content ||
 			len(campaign.Contacts) != len(newCampaign.Emails) {
@@ -91,7 +61,7 @@ func Test_Create_SaveCampaign(t *testing.T) {
 
 func Test_Create_ValidateRepositorySave(t *testing.T) {
 	assert := assert.New(t)
-	repositoryMock := new(repositoryMock)
+	repositoryMock := new(internalmock.CampaignRepositoryMock)
 	repositoryMock.On("Create", mock.Anything).Return(errors.New("error to save on database"))
 	service.Repository = repositoryMock
 
@@ -102,8 +72,8 @@ func Test_Create_ValidateRepositorySave(t *testing.T) {
 
 func Test_GetById_ReturnCampaign(t *testing.T) {
 	assert := assert.New(t)
-	repositoryMock := new(repositoryMock)
-	campaignExpected, _ := NewCampaign(
+	repositoryMock := new(internalmock.CampaignRepositoryMock)
+	campaignExpected, _ := campaign.NewCampaign(
 		newCampaign.Name,
 		newCampaign.Content,
 		newCampaign.Emails,
@@ -124,7 +94,7 @@ func Test_GetById_ReturnCampaign(t *testing.T) {
 
 func Test_GetById_ReturnErrorWhenSomethingWrong(t *testing.T) {
 	assert := assert.New(t)
-	repositoryMock := new(repositoryMock)
+	repositoryMock := new(internalmock.CampaignRepositoryMock)
 
 	repositoryMock.On("GetBy", mock.Anything).Return(nil, errors.New("Something Error"))
 	service.Repository = repositoryMock

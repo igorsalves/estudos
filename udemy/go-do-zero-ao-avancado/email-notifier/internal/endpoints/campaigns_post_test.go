@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/contract"
-	internalmock "github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/test/mock"
+	internalmock "github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/test/internal-mock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
