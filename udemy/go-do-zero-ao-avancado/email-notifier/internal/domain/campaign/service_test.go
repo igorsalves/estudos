@@ -14,7 +14,12 @@ type repositoryMock struct {
 	mock.Mock
 }
 
-func (r *repositoryMock) Save(campaign *Campaign) error {
+func (r *repositoryMock) Create(campaign *Campaign) error {
+	args := r.Called(campaign)
+	return args.Error(0)
+}
+
+func (r *repositoryMock) Update(campaign *Campaign) error {
 	args := r.Called(campaign)
 	return args.Error(0)
 }
@@ -32,6 +37,11 @@ func (r *repositoryMock) GetBy(id string) (*Campaign, error) {
 	return args.Get(0).(*Campaign), nil
 }
 
+func (r *repositoryMock) Delete(campaign *Campaign) error {
+	args := r.Called(campaign)
+	return args.Error(0)
+}
+
 var (
 	newCampaign = contract.NewCampaign{
 		Name:    "Test Y",
@@ -44,7 +54,7 @@ var (
 func Test_Create_Campaign(t *testing.T) {
 	assert := assert.New(t)
 	repositoryMock := new(repositoryMock)
-	repositoryMock.On("Save", mock.Anything).Return(nil)
+	repositoryMock.On("Create", mock.Anything).Return(nil)
 	service.Repository = repositoryMock
 
 	id, err := service.Create(newCampaign)
@@ -63,7 +73,7 @@ func Test_Create_ValidateDomainError(t *testing.T) {
 
 func Test_Create_SaveCampaign(t *testing.T) {
 	repositoryMock := new(repositoryMock)
-	repositoryMock.On("Save", mock.MatchedBy(func(campaign *Campaign) bool {
+	repositoryMock.On("Create", mock.MatchedBy(func(campaign *Campaign) bool {
 		if campaign.Name != newCampaign.Name ||
 			campaign.Content != newCampaign.Content ||
 			len(campaign.Contacts) != len(newCampaign.Emails) {
@@ -82,7 +92,7 @@ func Test_Create_SaveCampaign(t *testing.T) {
 func Test_Create_ValidateRepositorySave(t *testing.T) {
 	assert := assert.New(t)
 	repositoryMock := new(repositoryMock)
-	repositoryMock.On("Save", mock.Anything).Return(errors.New("error to save on database"))
+	repositoryMock.On("Create", mock.Anything).Return(errors.New("error to save on database"))
 	service.Repository = repositoryMock
 
 	_, err := service.Create(newCampaign)
