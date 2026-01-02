@@ -20,7 +20,7 @@ func (r *CampaignRepositoryMock) Update(campaign *campaign.Campaign) error {
 }
 
 func (r *CampaignRepositoryMock) Get() ([]campaign.Campaign, error) {
-	// args := r.Called()
+	//args := r.Called(campaign)
 	return nil, nil
 }
 
