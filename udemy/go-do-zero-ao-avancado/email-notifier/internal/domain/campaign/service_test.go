@@ -3,6 +3,7 @@ package campaign_test
 import (
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/contract"
 	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/domain/campaign"
@@ -175,6 +176,17 @@ func Test_Start_CampaignIsNotPending_Err(t *testing.T) {
 	assert.Equal(t, "Campaign status invalid", err.Error())
 }
 
+func Test_Start_CampaignIsPending_StatusIsStarted(t *testing.T) {
+	setUp()
+	setUpGetByIdRepositoryBy(campaignPending)
+	setUpUpdateRepository()
+	setUpSendEmailWithSuccess()
+
+	service.Start(campaignPending.ID)
+	time.Sleep(100 * time.Millisecond) // wait goroutine to finish
+	assert.Equal(t, campaign.Done, campaignPending.Status)
+}
+
 func Test_SendEmailAndUpdateStatus_Failed_StatusIsFail(t *testing.T) {
 	setUp()
 	setUpUpdateRepository()
@@ -186,4 +198,14 @@ func Test_SendEmailAndUpdateStatus_Failed_StatusIsFail(t *testing.T) {
 	service.SendEmailAndUpdateStatus(campaignPending)
 
 	assert.Equal(t, campaign.Fail, campaignPending.Status)
+}
+
+func Test_SendEmailAndUpdateStatus_Success_StatusIsDone(t *testing.T) {
+	setUp()
+	setUpUpdateRepository()
+	setUpSendEmailWithSuccess()
+
+	service.SendEmailAndUpdateStatus(campaignPending)
+
+	assert.Equal(t, campaign.Done, campaignPending.Status)
 }
