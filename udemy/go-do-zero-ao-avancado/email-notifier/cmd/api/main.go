@@ -9,6 +9,7 @@ import (
 	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/domain/campaign"
 	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/endpoints"
 	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/infrastructure/database"
+	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/infrastructure/mail"
 	"github.com/joho/godotenv"
 )
 
@@ -28,6 +29,7 @@ func main() {
 	db := database.NewDB()
 	campaignService := campaign.ServiceImp{
 		Repository: &database.CampaignRepository{Db: db},
+		SendMail:   mail.SendMail,
 	}
 	handler := endpoints.Handler{
 		CampaignService: &campaignService,
@@ -43,6 +45,7 @@ func main() {
 		r.Get("/{id}", endpoints.HandlerError(handler.CampaignGetById))
 		r.Post("/", endpoints.HandlerError(handler.CampaignPost))
 		r.Delete("/{id}", endpoints.HandlerError(handler.CampaignDelete))
+		r.Patch("/start/{id}", endpoints.HandlerError(handler.CampaignStart))
 	})
 
 	http.ListenAndServe(":3000", r)
