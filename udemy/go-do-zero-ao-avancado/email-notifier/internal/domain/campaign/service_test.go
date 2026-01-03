@@ -49,6 +49,18 @@ func setUpSendEmailWithSuccess() {
 	service.SendMail = sendMail
 }
 
+/*
+Padronização dos testes
+MethodName_Scenario_ExpectedBehavior
+MethodName_Context_ReturnOrAction
+
+MethodName: Qual método está sendo testado?
+Scenario or Context: Em que condições o método está sendo testado?
+ExpectedBehavior or ReturnOrAction: O que se espera que aconteça
+
+Ex: Test_Create_RequestIsValid_IdIsNotNil
+*/
+
 func Test_Create_RequestIsValid_IdIsNotNil(t *testing.T) {
 	setUp()
 	repositoryMock.On("Create", mock.Anything).Return(nil)
