@@ -5,7 +5,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/contract"
 	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/domain/campaign"
 	internalerrors "github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/internal-errors"
 	internalmock "github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/test/internal-mock"
@@ -15,7 +14,7 @@ import (
 )
 
 var (
-	newCampaign = contract.NewCampaign{
+	newCampaign = campaign.NewCampaignRequest{
 		Name:      "Test Y",
 		Content:   "Body Hi!",
 		Emails:    []string{"teste1@test.com"},
@@ -74,7 +73,7 @@ func Test_Create_RequestIsValid_IdIsNotNil(t *testing.T) {
 func Test_Create_RequestIsNotValid_ErrInternal(t *testing.T) {
 	setUp()
 
-	_, err := service.Create(contract.NewCampaign{})
+	_, err := service.Create(campaign.NewCampaignRequest{})
 
 	assert.False(t, errors.Is(internalerrors.ErrInternal, err))
 }

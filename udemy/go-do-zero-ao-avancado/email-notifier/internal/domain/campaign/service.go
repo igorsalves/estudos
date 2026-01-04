@@ -3,13 +3,12 @@ package campaign
 import (
 	"errors"
 
-	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/contract"
 	internalerrors "github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/internal-errors"
 )
 
 type Service interface {
-	Create(newCampaign contract.NewCampaign) (string, error)
-	GetBy(id string) (*contract.CampaignResponse, error)
+	Create(newCampaign NewCampaignRequest) (string, error)
+	GetBy(id string) (*CampaignResponse, error)
 	Delete(id string) error
 	Start(id string) error
 }
@@ -19,7 +18,7 @@ type ServiceImp struct {
 	SendMail   func(campaign *Campaign) error
 }
 
-func (s *ServiceImp) Create(newCampaign contract.NewCampaign) (string, error) {
+func (s *ServiceImp) Create(newCampaign NewCampaignRequest) (string, error) {
 	campaign, err := NewCampaign(newCampaign.Name, newCampaign.Content, newCampaign.Emails, newCampaign.CreatedBy)
 	if err != nil {
 		return "", err
@@ -33,7 +32,7 @@ func (s *ServiceImp) Create(newCampaign contract.NewCampaign) (string, error) {
 	return campaign.ID, nil
 }
 
-func (s *ServiceImp) GetBy(id string) (*contract.CampaignResponse, error) {
+func (s *ServiceImp) GetBy(id string) (*CampaignResponse, error) {
 
 	campaign, err := s.Repository.GetBy(id)
 
@@ -41,7 +40,7 @@ func (s *ServiceImp) GetBy(id string) (*contract.CampaignResponse, error) {
 		return nil, internalerrors.ProcessErrorToReturn(err)
 	}
 
-	return &contract.CampaignResponse{
+	return &CampaignResponse{
 		ID:                   campaign.ID,
 		Name:                 campaign.Name,
 		Content:              campaign.Content,

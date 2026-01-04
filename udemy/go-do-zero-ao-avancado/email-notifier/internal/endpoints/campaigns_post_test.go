@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/contract"
+	"github.com/igorsalves/estudos/tree/main/udemy/go-do-zero-ao-avancado/email-notifier/internal/domain/campaign"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 var (
 	createdByExpected = "teste1@teste.com.br"
-	body              = contract.NewCampaign{
+	body              = campaign.NewCampaignRequest{
 		Name:    "teste",
 		Content: "Hi everyone",
 		Emails:  []string{"teste@teste.com"},
@@ -20,7 +20,7 @@ var (
 
 func Test_CampaignsPost_201(t *testing.T) {
 	setup()
-	service.On("Create", mock.MatchedBy(func(request contract.NewCampaign) bool {
+	service.On("Create", mock.MatchedBy(func(request campaign.NewCampaignRequest) bool {
 		if request.Name == body.Name &&
 			request.Content == body.Content &&
 			request.CreatedBy == createdByExpected {
