@@ -4,21 +4,26 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"time"
 )
 
 // Leitura simples: lê todo o conteúdo do arquivo de uma vez
 func lerArquivoSimples(nome string) {
+	start := time.Now()
 	dados, err := os.ReadFile(nome)
 	if err != nil {
 		fmt.Println("Erro ao ler o arquivo (simples):", err)
 		return
 	}
+	duration := time.Since(start)
 	fmt.Println("Conteúdo do arquivo (simples):")
 	fmt.Println(string(dados))
+	fmt.Printf("Tempo de leitura simples: %v\n", duration)
 }
 
 // Forma mais simples de criar e escrever em um arquivo
 func escreverArquivoSimples() {
+	start := time.Now()
 	arquivo, err := os.Create("exemplo_simples.txt")
 	if err != nil {
 		fmt.Println("Erro ao criar o arquivo (simples):", err)
@@ -32,11 +37,14 @@ func escreverArquivoSimples() {
 		return
 	}
 
+	duration := time.Since(start)
 	fmt.Println("Arquivo (simples) criado e escrito com sucesso!")
+	fmt.Printf("Tempo de escrita simples: %v\n", duration)
 }
 
 // Leitura avançada: lê o arquivo linha a linha usando buffer
 func lerArquivoBuffer(nome string) {
+	start := time.Now()
 	arquivo, err := os.Open(nome)
 	if err != nil {
 		fmt.Println("Erro ao abrir o arquivo (buffer):", err)
@@ -52,10 +60,13 @@ func lerArquivoBuffer(nome string) {
 	if err := scanner.Err(); err != nil {
 		fmt.Println("Erro ao ler o arquivo (buffer):", err)
 	}
+	duration := time.Since(start)
+	fmt.Printf("Tempo de leitura buffer: %v\n", duration)
 }
 
 // Forma mais performática usando buffer
 func escreverArquivoBuffer() {
+	start := time.Now()
 	arquivo, err := os.Create("exemplo_buffer.txt")
 	if err != nil {
 		fmt.Println("Erro ao criar o arquivo (buffer):", err)
@@ -71,7 +82,9 @@ func escreverArquivoBuffer() {
 	}
 	writer.Flush()
 
+	duration := time.Since(start)
 	fmt.Println("Arquivo (buffer) criado e escrito com sucesso!")
+	fmt.Printf("Tempo de escrita buffer: %v\n", duration)
 }
 
 func main() {
@@ -81,5 +94,6 @@ func main() {
 	// lerArquivoSimples("exemplo_simples.txt")
 	// lerArquivoBuffer("exemplo_buffer.txt")
 
+	// lerArquivoSimples("TA_PRECO_MEDICAMENTO.csv")
 	lerArquivoBuffer("TA_PRECO_MEDICAMENTO.csv")
 }
